@@ -54,7 +54,7 @@ tbody.addEventListener('click', (e) => {
 });
 // #endregion
 
-// add a form to the dolument region
+// #region add a form to the document
 
 const form = document.createElement('form');
 
@@ -121,8 +121,75 @@ form.append(labelName, labelPos, labelOffice, labelAge, labelSal, button);
 
 body.appendChild(form);
 
+// #endregion
+
 form.addEventListener('submit', (e) => {
   e.preventDefault();
+
+  // #region value validation
+
+  const nameVal = inputName.value;
+  const namePattern = /^[A-Za-z]{4,}$/;
+  const errName = !namePattern.test(nameVal);
+  const ageVal = inputAge.value;
+  const errAge = ageVal < 18 || ageVal > 90;
+  const position = inputPos.value;
+  const positions = [...document.querySelectorAll('td:nth-child(2)')];
+
+  const validPosition = positions.some((pos) => pos.textContent === position);
+
+  if (!validPosition) {
+    const warningNotification = document.createElement('div');
+
+    warningNotification.setAttribute('data-qa', 'notification');
+    warningNotification.classList.add('notification', 'warning');
+
+    const warningTitle = document.createElement('span');
+
+    warningTitle.classList.add('title');
+    warningTitle.textContent = 'Warning';
+
+    const warningMessage = document.createElement('p');
+
+    warningMessage.textContent = 'There is no such position in this office';
+
+    warningNotification.append(warningTitle, warningMessage);
+    body.append(warningNotification);
+
+    setTimeout(() => {
+      warningNotification.remove();
+    }, 2000);
+
+    return;
+  }
+
+  if (errAge || errName) {
+    const errorNotification = document.createElement('div');
+
+    errorNotification.setAttribute('data-qa', 'notification');
+    errorNotification.classList.add('notification', 'error');
+
+    const errorTitle = document.createElement('span');
+
+    errorTitle.classList.add('title');
+    errorTitle.textContent = 'Error';
+
+    const errorMessage = document.createElement('p');
+
+    errorMessage.textContent =
+      'Name should be longer then 4 letters and age is less then 90';
+
+    errorNotification.append(errorTitle, errorMessage);
+    body.append(errorNotification);
+
+    setTimeout(() => {
+      errorNotification.remove();
+    }, 2000);
+
+    return;
+  }
+
+  // #endregion
 
   const newEmployRow = document.createElement('tr');
   const inputs = [...document.querySelectorAll('input, select')];
@@ -145,4 +212,25 @@ form.addEventListener('submit', (e) => {
   });
 
   tbody.append(newEmployRow);
+
+  const successNotification = document.createElement('div');
+
+  successNotification.setAttribute('data-qa', 'notification');
+  successNotification.classList.add('notification', 'success');
+
+  const successTitle = document.createElement('span');
+
+  successTitle.classList.add('title');
+  successTitle.textContent = 'Success';
+
+  const successMessage = document.createElement('p');
+
+  successMessage.textContent = 'New employee successfully added';
+
+  successNotification.append(successTitle, successMessage);
+  body.append(successNotification);
+
+  setTimeout(() => {
+    successNotification.remove();
+  }, 2000);
 });
