@@ -29,7 +29,7 @@ headerToEventList.addEventListener('click', (e) => {
     return val1.localeCompare(val2);
   });
 
-  if (sortDirections[colIndex] !== 'asc') {
+  if (sortDirections[colIndex] === 'dec') {
     rows.reverse();
     sortDirections[colIndex] = 'asc';
   } else {
@@ -151,7 +151,7 @@ form.addEventListener('submit', (e) => {
 
     const warningMessage = document.createElement('p');
 
-    warningMessage.textContent = 'There is no such position in this office';
+    warningMessage.textContent = 'There is no such position';
 
     warningNotification.append(warningTitle, warningMessage);
     body.append(warningNotification);
@@ -177,7 +177,7 @@ form.addEventListener('submit', (e) => {
     const errorMessage = document.createElement('p');
 
     errorMessage.textContent =
-      'Name should be longer then 4 letters and age is less then 90';
+      'Name must be at least 4 letters and age must be between 18 and 90';
 
     errorNotification.append(errorTitle, errorMessage);
     body.append(errorNotification);
@@ -191,6 +191,7 @@ form.addEventListener('submit', (e) => {
 
   // #endregion
 
+  // #region new employee add
   const newEmployRow = document.createElement('tr');
   const inputs = [...document.querySelectorAll('input, select')];
 
@@ -233,4 +234,6 @@ form.addEventListener('submit', (e) => {
   setTimeout(() => {
     successNotification.remove();
   }, 2000);
+
+  // #endregion
 });
